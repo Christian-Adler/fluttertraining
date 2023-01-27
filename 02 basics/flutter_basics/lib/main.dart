@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_basics/quiz.dart';
 import 'package:flutter_basics/result.dart';
 
+import 'GradientAppBar.dart';
+
 // void main() {
 //   runApp(MyApp());
 // }
@@ -58,35 +60,35 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _resetQuiz() {
+    setState(() {
+      _totalScore = 0;
+      _questionIdx = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
+        appBar: GradientAppBar(
           title: Text('My first App'),
-          // backgroundColor: Color.fromRGBO(102, 0, 255, 1.0),
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  // begin: Alignment.topCenter,
-                  // end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    Color(0xff027dfd),
-                    Color(0xff4100e0),
-                  ]),
-            ),
-          ),
+          gradientColors: [
+            Color(0xff027dfd),
+            Color(0xff4100e0),
+          ],
         ),
         body: _questionIdx < _questions.length
             ? Quiz(
-                questions: _questions,
-                answerQuestion: _answerQuestion,
-                questionIdx: _questionIdx,
-              )
+          questions: _questions,
+          answerQuestion: _answerQuestion,
+          questionIdx: _questionIdx,
+        )
             : Result(
-                resultText: 'FINISHED',
-                resultScore: _totalScore,
-              ),
+          resultText: 'FINISHED',
+          resultScore: _totalScore,
+          resetHandler: _resetQuiz,
+        ),
       ),
     );
   }
