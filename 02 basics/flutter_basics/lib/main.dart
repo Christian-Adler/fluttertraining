@@ -10,18 +10,18 @@ void main() => runApp(MyApp());
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return MyAppState();
+    return _MyAppState();
   }
 }
 
-class MyAppState extends State<MyApp> {
-  var questionIdx = 0;
+class _MyAppState extends State<MyApp> {
+  var _questionIdx = 0;
 
-  void answerQuestion() {
+  void _answerQuestion() {
     print('Answer');
     setState(() {
-      questionIdx++;
-      if (questionIdx >= 2) questionIdx = 0;
+      _questionIdx++;
+      if (_questionIdx >= 2) _questionIdx = 0;
     });
   }
 
@@ -37,8 +37,8 @@ class MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: <Widget>[
-            Text(questions[questionIdx]),
-            ElevatedButton(onPressed: answerQuestion, child: Text('Answer 1')),
+            Text(questions[_questionIdx]),
+            ElevatedButton(onPressed: _answerQuestion, child: Text('Answer 1')),
             ElevatedButton(
                 onPressed: () => print('answer 2'), child: Text('Answer 2')),
             ElevatedButton(
