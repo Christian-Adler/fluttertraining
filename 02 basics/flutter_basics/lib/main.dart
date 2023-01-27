@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_basics/answer.dart';
-
-import './question.dart';
+import 'package:flutter_basics/quiz.dart';
+import 'package:flutter_basics/result.dart';
 
 // void main() {
 //   runApp(MyApp());
@@ -62,18 +61,14 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         body: _questionIdx < _questions.length
-            ? Column(
-                children: <Widget>[
-                  Question(
-                    _questions[_questionIdx]['questionText'],
-                  ),
-                  ...(_questions[_questionIdx]['answers'] as List<String>)
-                      .map((answer) {
-                    return Answer(_answerQuestion, answer);
-                  }).toList(),
-                ],
+            ? Quiz(
+                questions: _questions,
+                answerQuestion: _answerQuestion,
+                questionIdx: _questionIdx,
               )
-            : Center(child: Text('FINISHED')),
+            : Result(
+                resultText: 'FINISHED',
+              ),
       ),
     );
   }
