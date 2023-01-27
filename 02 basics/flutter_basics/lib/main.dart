@@ -19,7 +19,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var _questionIdx = 0;
-  var questions = [
+  static const _questions = [
     {
       'questionText': 'What\'s your favorite color?',
       'answers': ['Black', 'Red', 'Green', 'Blue']
@@ -38,8 +38,7 @@ class _MyAppState extends State<MyApp> {
     print('Answer');
     setState(() {
       _questionIdx++;
-      if (_questionIdx % questions.length == 0)
-        _questionIdx = 0;
+      // if (_questionIdx % questions.length == 0) _questionIdx = 0;
     });
   }
 
@@ -53,8 +52,8 @@ class _MyAppState extends State<MyApp> {
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                // begin: Alignment.topCenter,
-                // end: Alignment.bottomCenter,
+                  // begin: Alignment.topCenter,
+                  // end: Alignment.bottomCenter,
                   colors: <Color>[
                     Color(0xff027dfd),
                     Color(0xff4100e0),
@@ -62,17 +61,19 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
-        body: Column(
-          children: <Widget>[
-            Question(
-              questions[_questionIdx]['questionText'],
-            ),
-            ...(questions[_questionIdx]['answers'] as List<String>)
-                .map((answer) {
-              return Answer(_answerQuestion, answer);
-            }).toList(),
-          ],
-        ),
+        body: _questionIdx < _questions.length
+            ? Column(
+                children: <Widget>[
+                  Question(
+                    _questions[_questionIdx]['questionText'],
+                  ),
+                  ...(_questions[_questionIdx]['answers'] as List<String>)
+                      .map((answer) {
+                    return Answer(_answerQuestion, answer);
+                  }).toList(),
+                ],
+              )
+            : Center(child: Text('FINISHED')),
       ),
     );
   }
