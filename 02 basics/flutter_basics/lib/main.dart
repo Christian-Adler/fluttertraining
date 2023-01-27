@@ -7,9 +7,22 @@ import 'package:flutter/material.dart';
 // Function with only one expression:
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return MyAppState();
+  }
+}
+
+class MyAppState extends State<MyApp> {
+  var questionIdx = 0;
+
   void answerQuestion() {
     print('Answer');
+    setState(() {
+      questionIdx++;
+      if (questionIdx >= 2) questionIdx = 0;
+    });
   }
 
   @override
@@ -24,7 +37,7 @@ class MyApp extends StatelessWidget {
         ),
         body: Column(
           children: <Widget>[
-            Text('the question'),
+            Text(questions[questionIdx]),
             ElevatedButton(onPressed: answerQuestion, child: Text('Answer 1')),
             ElevatedButton(
                 onPressed: () => print('answer 2'), child: Text('Answer 2')),
