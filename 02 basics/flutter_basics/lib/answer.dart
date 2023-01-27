@@ -18,7 +18,22 @@ class Answer extends StatelessWidget {
         //     backgroundColor: MaterialStateProperty.all(Colors.cyan),
         //     foregroundColor: MaterialStateProperty.all(Colors.white),
         // ),
+        //Alternativ kuerzer
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.deepPurple, foregroundColor: Colors.white),
       ),
+      // child: TextButton(
+      //   child: Text(answerText),
+      //   onPressed: selectHandler,
+      //   style: TextButton.styleFrom(foregroundColor: Colors.deepPurple),
+      // ),
+      // child: OutlinedButton(
+      //   child: Text(answerText),
+      //   onPressed: selectHandler,
+      //   style: OutlinedButton.styleFrom(
+      //       foregroundColor: Colors.deepPurple,
+      //       side: BorderSide(color: Colors.cyan)),
+      // ),
     );
   }
 }
