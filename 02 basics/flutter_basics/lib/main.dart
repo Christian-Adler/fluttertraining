@@ -35,7 +35,18 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(
           title: Text('My first App'),
-          backgroundColor: Color.fromRGBO(102, 0, 255, 1.0),
+          // backgroundColor: Color.fromRGBO(102, 0, 255, 1.0),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  // begin: Alignment.topCenter,
+                  // end: Alignment.bottomCenter,
+                  colors: <Color>[
+                    Color(0xff027dfd),
+                    Color(0xff4100e0),
+                  ]),
+            ),
+          ),
         ),
         body: Column(
           children: <Widget>[
