@@ -12,9 +12,29 @@ class TransactionCard extends StatelessWidget {
     return Card(
       margin: EdgeInsets.only(top: 20), // large padding to get overflow soon
       child: Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    transaction.title,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.lightBlue),
+                  ),
+                  Text(
+                    DateFormat('yyyy-MM-dd').format(transaction.date),
+                    // https://pub.dev/packages/intl
+                    style: TextStyle(color: Colors.black26, fontSize: 10),
+                  ),
+                ],
+              ),
+            ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               padding: EdgeInsets.symmetric(
@@ -29,29 +49,12 @@ class TransactionCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                '${transaction.amount} €',
+                '${transaction.amount.toStringAsFixed(2)} €',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     color: Colors.deepPurple),
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  transaction.title,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.lightBlue),
-                ),
-                Text(
-                  DateFormat('yyyy-MM-dd').format(transaction.date),
-                  // https://pub.dev/packages/intl
-                  style: TextStyle(color: Colors.black26, fontSize: 10),
-                ),
-              ],
             )
           ]),
     );
