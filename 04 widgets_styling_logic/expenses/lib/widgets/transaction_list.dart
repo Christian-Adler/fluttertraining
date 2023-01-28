@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/transaction.dart';
-import '../transaction_card.dart';
+import 'transaction_card.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> userTransactions;
@@ -10,11 +10,17 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: userTransactions.map((tx) {
-        return TransactionCard(tx);
-      }).toList(),
+    return Container(
+      height: 320, // Fixe hohehe im moment notwendig damit Scroll funktioniert.
+      color: Colors.black12,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: userTransactions.map((tx) {
+            return TransactionCard(tx);
+          }).toList(),
+        ),
+      ),
     );
   }
 }

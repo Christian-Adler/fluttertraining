@@ -10,12 +10,13 @@ class TransactionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.only(top: 20), // large padding to get overflow soon
       child: Row(
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               padding: EdgeInsets.symmetric(
                 vertical: 5,
                 horizontal: 10,

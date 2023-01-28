@@ -20,6 +20,10 @@ class _UserTransactionsState extends State<UserTransactions> {
         title: 'Weekly Groceries',
         amount: 25.84,
         date: DateTime.now()),
+    Transaction(id: 't3', title: 'New T3', amount: 69.99, date: DateTime.now()),
+    Transaction(id: 't4', title: 'New T4', amount: 29.99, date: DateTime.now()),
+    Transaction(id: 't5', title: 'New T5', amount: 19.99, date: DateTime.now()),
+    Transaction(id: 't6', title: 'New T6', amount: 39.99, date: DateTime.now()),
   ];
 
   void _addTransactionHandler(String title, double amount) {
