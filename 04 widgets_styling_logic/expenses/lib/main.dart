@@ -1,3 +1,4 @@
+import 'package:expenses/transaction_card.dart';
 import 'package:flutter/material.dart';
 
 import 'transaction.dart';
@@ -46,9 +47,7 @@ class MyHomePage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: transactions.map((tx) {
-              return Card(
-                child: Text(tx.title),
-              );
+              return TransactionCard(tx);
             }).toList(),
           ),
         ],
