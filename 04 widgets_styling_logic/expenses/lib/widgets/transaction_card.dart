@@ -40,7 +40,7 @@ class TransactionCard extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.primary,
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -50,7 +50,7 @@ class TransactionCard extends StatelessWidget {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
-                    color: Theme.of(context).primaryColor),
+                    color: Theme.of(context).colorScheme.primary),
               ),
             )
           ]),
