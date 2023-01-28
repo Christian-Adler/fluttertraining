@@ -20,6 +20,14 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter App'),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.add_circle_outline,
+                color: Colors.white,
+              ))
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -38,6 +46,11 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add_circle_outline),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
