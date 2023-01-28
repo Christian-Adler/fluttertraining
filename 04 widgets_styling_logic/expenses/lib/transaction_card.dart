@@ -1,5 +1,6 @@
 import 'package:expenses/transaction.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TransactionCard extends StatelessWidget {
   final Transaction transaction;
@@ -45,7 +46,8 @@ class TransactionCard extends StatelessWidget {
                       color: Colors.lightBlue),
                 ),
                 Text(
-                  transaction.date.toString(),
+                  DateFormat('yyyy-MM-dd').format(transaction.date),
+                  // https://pub.dev/packages/intl
                   style: TextStyle(color: Colors.black26, fontSize: 10),
                 ),
               ],
