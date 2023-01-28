@@ -21,7 +21,10 @@ class _NewTransactionState extends State<NewTransaction> {
     if (enteredTitle.isEmpty || enteredAmount.isNaN || enteredAmount <= 0)
       return;
 
+    // widget. gibt Zugriff auf properties des Widgets (was ja eine andere Klasse ist)
     widget.addTransaction(enteredTitle, enteredAmount);
+
+    Navigator.of(context).pop();
   }
 
   @override
