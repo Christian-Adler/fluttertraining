@@ -13,13 +13,10 @@ class TransactionList extends StatelessWidget {
     return Container(
       height: 320, // Fixe hohehe im moment notwendig damit Scroll funktioniert.
       color: Colors.black12,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: userTransactions.map((tx) {
-            return TransactionCard(tx);
-          }).toList(),
-        ),
+      child: ListView(
+        children: userTransactions.map((tx) {
+          return TransactionCard(tx);
+        }).toList(),
       ),
     );
   }
