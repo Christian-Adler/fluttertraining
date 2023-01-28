@@ -22,10 +22,7 @@ class TransactionCard extends StatelessWidget {
                 children: [
                   Text(
                     transaction.title,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.lightBlue),
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   Text(
                     DateFormat('yyyy-MM-dd').format(transaction.date),
