@@ -52,13 +52,20 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [
     Transaction(
-        id: 't1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
+        id: 't1',
+        title: 'New Shoes',
+        amount: 69.99,
+        date: DateTime.now().subtract(Duration(days: 3))),
     Transaction(
         id: 't2',
         title: 'Weekly Groceries',
         amount: 25.84,
         date: DateTime.now()),
-    Transaction(id: 't3', title: 'New T3', amount: 69.99, date: DateTime.now()),
+    Transaction(
+        id: 't3',
+        title: 'New T3',
+        amount: 69.99,
+        date: DateTime.now().subtract(Duration(days: 5))),
     Transaction(id: 't4', title: 'New T4', amount: 29.99, date: DateTime.now()),
     Transaction(id: 't5', title: 'New T5', amount: 19.99, date: DateTime.now()),
     Transaction(id: 't6', title: 'New T6', amount: 39.99, date: DateTime.now()),
@@ -102,6 +109,13 @@ class _MyHomePageState extends State<MyHomePage> {
         .toList();
   }
 
+  List<Transaction> get _sortedTransactions {
+    _userTransactions.sort((a, b) {
+      return a.date.millisecondsSinceEpoch - b.date.millisecondsSinceEpoch;
+    });
+    return _userTransactions;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
               width: double.infinity,
               child: Chart(_recentTransactions),
             ),
-            TransactionList(_userTransactions, _deleteTransaction),
+            TransactionList(_sortedTransactions, _deleteTransaction),
           ],
         ),
       ),
