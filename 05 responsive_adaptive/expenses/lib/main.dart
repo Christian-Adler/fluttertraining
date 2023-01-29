@@ -13,7 +13,6 @@ void main() {
   runApp(MyApp());
 }
 
-// comment2
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -126,6 +125,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     var appBar = AppBar(
       title: Text('Personal Expenses'),
       actions: [
@@ -143,6 +145,10 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top);
 
+    var transactionListContainer = Container(
+        height: availableBodyHeight * 0.7,
+        child: TransactionList(_sortedTransactions, _deleteTransaction));
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
@@ -150,29 +156,35 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Show Chart"),
-                Switch(
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    }),
-              ],
-            ),
-            _showChart
-                ? Container(
-                    height: availableBodyHeight * 0.7,
-                    width: double.infinity,
-                    child: Chart(_recentTransactions),
-                  )
-                : Container(
-                    height: availableBodyHeight * 0.7,
-                    child: TransactionList(
-                        _sortedTransactions, _deleteTransaction)),
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Show Chart"),
+                  Switch(
+                      value: _showChart,
+                      onChanged: (val) {
+                        setState(() {
+                          _showChart = val;
+                        });
+                      }),
+                ],
+              ),
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      height: availableBodyHeight * 0.7,
+                      width: double.infinity,
+                      child: Chart(_recentTransactions),
+                    )
+                  : transactionListContainer,
+            if (!isLandscape)
+              Container(
+                height: availableBodyHeight * 0.3,
+                width: double.infinity,
+                child: Chart(_recentTransactions),
+              ),
+            if (!isLandscape) transactionListContainer,
           ],
         ),
       ),
