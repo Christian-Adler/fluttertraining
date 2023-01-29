@@ -1,3 +1,4 @@
+import 'package:expenses/widgets/chart.dart';
 import 'package:expenses/widgets/new_transaction.dart';
 import 'package:flutter/material.dart';
 
@@ -48,17 +49,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [
-    // Transaction(
-    //     id: 't1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
-    // Transaction(
-    //     id: 't2',
-    //     title: 'Weekly Groceries',
-    //     amount: 25.84,
-    //     date: DateTime.now()),
-    // Transaction(id: 't3', title: 'New T3', amount: 69.99, date: DateTime.now()),
-    // Transaction(id: 't4', title: 'New T4', amount: 29.99, date: DateTime.now()),
-    // Transaction(id: 't5', title: 'New T5', amount: 19.99, date: DateTime.now()),
-    // Transaction(id: 't6', title: 'New T6', amount: 39.99, date: DateTime.now()),
+    Transaction(
+        id: 't1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
+    Transaction(
+        id: 't2',
+        title: 'Weekly Groceries',
+        amount: 25.84,
+        date: DateTime.now()),
+    Transaction(id: 't3', title: 'New T3', amount: 69.99, date: DateTime.now()),
+    Transaction(id: 't4', title: 'New T4', amount: 29.99, date: DateTime.now()),
+    Transaction(id: 't5', title: 'New T5', amount: 19.99, date: DateTime.now()),
+    Transaction(id: 't6', title: 'New T6', amount: 39.99, date: DateTime.now()),
   ];
 
   void _addTransactionHandler(String title, double amount) {
@@ -84,6 +85,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  List<Transaction> get _recentTransactions {
+    var before7Days = DateTime.now().subtract(Duration(days: 7));
+    return _userTransactions
+        .where((element) => element.date.isAfter(before7Days))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,11 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Container(
               width: double.infinity,
-              child: Card(
-                // color: Colors.black12,
-                child: Text('chart'),
-                elevation: 5,
-              ),
+              child: Chart(_recentTransactions),
             ),
             TransactionList(_userTransactions),
           ],
