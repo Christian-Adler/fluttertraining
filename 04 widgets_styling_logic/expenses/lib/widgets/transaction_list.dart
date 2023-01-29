@@ -12,7 +12,14 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 320, // Fixe hohehe im moment notwendig damit Scroll funktioniert.
-      color: Colors.black12,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey,
+            width: 1,
+          ),
+        ),
+      ),
       child: userTransactions.isEmpty
           ? Column(
               children: [
