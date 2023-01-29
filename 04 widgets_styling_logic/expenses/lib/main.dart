@@ -23,6 +23,8 @@ class MyApp extends StatelessWidget {
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
+              labelLarge:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
         appBarTheme: AppBarTheme(
           titleTextStyle: ThemeData.light()
