@@ -6,6 +6,10 @@ import 'models/transaction.dart';
 import 'widgets/transaction_list.dart';
 
 void main() {
+  // Allow only one orientation:
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations(
+  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 
