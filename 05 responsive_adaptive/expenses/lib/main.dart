@@ -7,7 +7,6 @@ import 'widgets/transaction_list.dart';
 
 void main() {
   runApp(MyApp());
-  WidgetsFlutterBinding.ensureInitialized();
 }
 
 class MyApp extends StatelessWidget {
@@ -121,29 +120,38 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var appBar = AppBar(
+      title: Text('Personal Expenses'),
+      actions: [
+        IconButton(
+            onPressed: () {
+              _startAddNewTransaction(context);
+            },
+            icon: Icon(
+              Icons.add_circle_outline,
+            ))
+      ],
+    );
+
+    var availableBodyHeight = (MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Personal Expenses'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                _startAddNewTransaction(context);
-              },
-              icon: Icon(
-                Icons.add_circle_outline,
-              ))
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
+              height: availableBodyHeight * 0.4,
               width: double.infinity,
               child: Chart(_recentTransactions),
             ),
-            TransactionList(_sortedTransactions, _deleteTransaction),
+            Container(
+                height: availableBodyHeight * 0.6,
+                child:
+                    TransactionList(_sortedTransactions, _deleteTransaction)),
           ],
         ),
       ),
