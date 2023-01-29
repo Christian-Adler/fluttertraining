@@ -56,6 +56,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var _showChart = false;
   final List<Transaction> _userTransactions = [
     Transaction(
         id: 't1',
@@ -140,6 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var availableBodyHeight = (MediaQuery.of(context).size.height -
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top);
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
@@ -147,15 +149,29 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              height: availableBodyHeight * 0.3,
-              width: double.infinity,
-              child: Chart(_recentTransactions),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Show Chart"),
+                Switch(
+                    value: _showChart,
+                    onChanged: (val) {
+                      setState(() {
+                        _showChart = val;
+                      });
+                    }),
+              ],
             ),
-            Container(
-                height: availableBodyHeight * 0.7,
-                child:
-                    TransactionList(_sortedTransactions, _deleteTransaction)),
+            _showChart
+                ? Container(
+                    height: availableBodyHeight * 0.7,
+                    width: double.infinity,
+                    child: Chart(_recentTransactions),
+                  )
+                : Container(
+                    height: availableBodyHeight * 0.7,
+                    child: TransactionList(
+                        _sortedTransactions, _deleteTransaction)),
           ],
         ),
       ),
