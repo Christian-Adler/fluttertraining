@@ -151,41 +151,43 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Show Chart"),
-                  Switch(
-                      value: _showChart,
-                      onChanged: (val) {
-                        setState(() {
-                          _showChart = val;
-                        });
-                      }),
-                ],
-              ),
-            if (isLandscape)
-              _showChart
-                  ? Container(
-                      height: availableBodyHeight * 0.7,
-                      width: double.infinity,
-                      child: Chart(_recentTransactions),
-                    )
-                  : transactionListContainer,
-            if (!isLandscape)
-              Container(
-                height: availableBodyHeight * 0.3,
-                width: double.infinity,
-                child: Chart(_recentTransactions),
-              ),
-            if (!isLandscape) transactionListContainer,
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (isLandscape)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Show Chart"),
+                    Switch(
+                        value: _showChart,
+                        onChanged: (val) {
+                          setState(() {
+                            _showChart = val;
+                          });
+                        }),
+                  ],
+                ),
+              if (isLandscape)
+                _showChart
+                    ? Container(
+                        height: availableBodyHeight * 0.7,
+                        width: double.infinity,
+                        child: Chart(_recentTransactions),
+                      )
+                    : transactionListContainer,
+              if (!isLandscape)
+                Container(
+                  height: availableBodyHeight * 0.3,
+                  width: double.infinity,
+                  child: Chart(_recentTransactions),
+                ),
+              if (!isLandscape) transactionListContainer,
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
