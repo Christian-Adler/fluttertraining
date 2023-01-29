@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
-  final Function(String title, double amount) addTransaction;
+  final Function(String title, double amount, DateTime chosenDate)
+      addTransaction;
 
   NewTransaction(this.addTransaction, {Key key}) : super(key: key);
 
@@ -25,7 +26,7 @@ class _NewTransactionState extends State<NewTransaction> {
         _selectedDate == null) return;
 
     // widget. gibt Zugriff auf properties des Widgets (was ja eine andere Klasse ist)
-    widget.addTransaction(enteredTitle, enteredAmount);
+    widget.addTransaction(enteredTitle, enteredAmount, _selectedDate);
 
     Navigator.of(context).pop();
   }
