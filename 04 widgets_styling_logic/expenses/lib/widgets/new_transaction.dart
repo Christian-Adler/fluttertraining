@@ -5,7 +5,7 @@ class NewTransaction extends StatefulWidget {
   final Function(String title, double amount, DateTime chosenDate)
       addTransaction;
 
-  NewTransaction(this.addTransaction, {Key key}) : super(key: key);
+  NewTransaction(this.addTransaction, {Key? key}) : super(key: key);
 
   @override
   State<NewTransaction> createState() => _NewTransactionState();
@@ -14,7 +14,9 @@ class NewTransaction extends StatefulWidget {
 class _NewTransactionState extends State<NewTransaction> {
   final _titelController = TextEditingController();
   final _amountController = TextEditingController();
-  DateTime _selectedDate = null;
+
+  DateTime _invalidDate = DateTime.now().copyWith(year: 2000);
+  DateTime _selectedDate = DateTime.now().copyWith(year: 1999);
 
   void _submitData() {
     var enteredTitle = _titelController.text;
@@ -23,7 +25,7 @@ class _NewTransactionState extends State<NewTransaction> {
     if (enteredTitle.isEmpty ||
         enteredAmount.isNaN ||
         enteredAmount <= 0 ||
-        _selectedDate == null) return;
+        _selectedDate.isBefore(_invalidDate)) return;
 
     // widget. gibt Zugriff auf properties des Widgets (was ja eine andere Klasse ist)
     widget.addTransaction(enteredTitle, enteredAmount, _selectedDate);
@@ -71,9 +73,9 @@ class _NewTransactionState extends State<NewTransaction> {
                 children: [
                   Expanded(
                     child: Text(
-                      _selectedDate == null
+                      _selectedDate.isBefore(_invalidDate)
                           ? 'No Date Chose!'
-                          : 'Picked date: ${DateFormat.yMd().format(_selectedDate)}',
+                          : 'Picked date: ${DateFormat.yMd().format(_selectedDate)} ${DateFormat.yMd().format(_invalidDate)}',
                     ),
                   ),
                   TextButton(

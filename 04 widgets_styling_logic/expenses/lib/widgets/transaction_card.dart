@@ -7,7 +7,7 @@ class TransactionCard extends StatelessWidget {
   final VoidCallback deleteTransactionHandler;
 
   const TransactionCard(this.transaction, this.deleteTransactionHandler,
-      {Key key})
+      {Key? key})
       : super(key: key);
 
   @override
