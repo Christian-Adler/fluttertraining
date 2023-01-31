@@ -123,28 +123,34 @@ class _MyHomePageState extends State<MyHomePage> {
     return _userTransactions;
   }
 
-  Widget _buildLandscapeContent() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text("Show Chart"),
-        Switch(
-            value: _showChart,
-            onChanged: (val) {
-              setState(() {
-                _showChart = val;
-              });
-            }),
-      ],
-    );
-  }
-
   Widget _buildChartContent(double height) {
     return Container(
       height: height,
       width: double.infinity,
       child: Chart(_recentTransactions),
     );
+  }
+
+  List<Widget> _buildLandscapeContent(
+      double availableBodyHeight, Widget transactionListContainer) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Show Chart"),
+          Switch(
+              value: _showChart,
+              onChanged: (val) {
+                setState(() {
+                  _showChart = val;
+                });
+              }),
+        ],
+      ),
+      _showChart
+          ? _buildChartContent(availableBodyHeight * 0.7)
+          : transactionListContainer
+    ];
   }
 
   List<Widget> _buildPortraitContent(
@@ -189,11 +195,9 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (isLandscape) _buildLandscapeContent(),
               if (isLandscape)
-                _showChart
-                    ? _buildChartContent(availableBodyHeight * 0.7)
-                    : transactionListContainer,
+                ..._buildLandscapeContent(
+                    availableBodyHeight, transactionListContainer),
               if (!isLandscape)
                 ..._buildPortraitContent(
                     availableBodyHeight, transactionListContainer),
