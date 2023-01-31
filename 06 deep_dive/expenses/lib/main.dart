@@ -123,6 +123,38 @@ class _MyHomePageState extends State<MyHomePage> {
     return _userTransactions;
   }
 
+  Widget _buildLandscapeContent() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Show Chart"),
+        Switch(
+            value: _showChart,
+            onChanged: (val) {
+              setState(() {
+                _showChart = val;
+              });
+            }),
+      ],
+    );
+  }
+
+  Widget _buildChartContent(double height) {
+    return Container(
+      height: height,
+      width: double.infinity,
+      child: Chart(_recentTransactions),
+    );
+  }
+
+  List<Widget> _buildPortraitContent(
+      double availableBodyHeight, Widget transactionListContainer) {
+    return [
+      _buildChartContent(availableBodyHeight * 0.3),
+      transactionListContainer
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLandscape =
@@ -157,35 +189,14 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (isLandscape)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Show Chart"),
-                    Switch(
-                        value: _showChart,
-                        onChanged: (val) {
-                          setState(() {
-                            _showChart = val;
-                          });
-                        }),
-                  ],
-                ),
+              if (isLandscape) _buildLandscapeContent(),
               if (isLandscape)
                 _showChart
-                    ? Container(
-                        height: availableBodyHeight * 0.7,
-                        width: double.infinity,
-                        child: Chart(_recentTransactions),
-                      )
+                    ? _buildChartContent(availableBodyHeight * 0.7)
                     : transactionListContainer,
               if (!isLandscape)
-                Container(
-                  height: availableBodyHeight * 0.3,
-                  width: double.infinity,
-                  child: Chart(_recentTransactions),
-                ),
-              if (!isLandscape) transactionListContainer,
+                ..._buildPortraitContent(
+                    availableBodyHeight, transactionListContainer),
             ],
           ),
         ),
