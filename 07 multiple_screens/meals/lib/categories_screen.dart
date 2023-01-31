@@ -20,7 +20,7 @@ class CategoriesScreen extends StatelessWidget {
             mainAxisSpacing: 20),
         children: [
           ...DUMMY_CATEGORIES
-              .map((cData) => CategoryItem(cData.title, cData.color))
+              .map((cData) => CategoryItem(cData.id, cData.title, cData.color))
               .toList(),
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
