@@ -7,9 +7,9 @@ class CategoryMealsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('The Recipies'),
+        title: const Text('The Recipes'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Screen 2'),
       ),
     );
