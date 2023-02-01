@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meals/screens/categories_screen.dart';
 import 'package:meals/screens/category_meals_screen.dart';
-import 'package:meals/screens/meal_detail_screen.dart';
+import 'package:meals/screens/fallback_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,7 +40,20 @@ class MyApp extends StatelessWidget {
       routes: {
         //  '/' : (ctx) => entspricht home-Screen
         CategoryMealsScreen.routeName: (ctx) => const CategoryMealsScreen(),
-        MealDetailScreen.routeName: (ctx) => const MealDetailScreen(),
+        // MealDetailScreen.routeName: (ctx) => const MealDetailScreen(),
+      },
+      onGenerateRoute: (settings) {
+        print(settings.arguments);
+        // generic route dispatch
+        // if(settings.name==...)
+        //   return ...
+        // return MaterialPageRoute(builder: (ctx) => const CategoriesScreen());
+      },
+      onUnknownRoute: (settings) {
+        // Prevent app crash and show at least something on the screen. e.g. not found.
+        return MaterialPageRoute(builder: (ctx) {
+          return const FallbackScreen(); // This should never really be seen.
+        });
       },
     );
   }
