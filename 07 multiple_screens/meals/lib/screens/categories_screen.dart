@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meals/category_item.dart';
 import 'package:meals/dummy_data.dart';
+import 'package:meals/widgets/category_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
   static const String routeName = '/';
@@ -13,6 +13,7 @@ class CategoriesScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Meals"),
       ),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: GridView(
         padding: const EdgeInsets.all(20),
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
