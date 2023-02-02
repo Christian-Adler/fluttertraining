@@ -13,7 +13,6 @@ class CategoriesScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Meals"),
       ),
-      backgroundColor: Theme.of(context).colorScheme.background,
       body: GridView(
         padding: const EdgeInsets.all(20),
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(

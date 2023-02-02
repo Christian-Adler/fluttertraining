@@ -3,6 +3,8 @@ import 'package:meals/screens/categories_screen.dart';
 import 'package:meals/screens/category_meals_screen.dart';
 import 'package:meals/screens/fallback_screen.dart';
 
+import 'screens/meal_detail_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -16,10 +18,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.pink)
-            .copyWith(
-                secondary: Colors.amber,
-                background: const Color.fromRGBO(255, 254, 229, 1)),
+        scaffoldBackgroundColor: const Color.fromRGBO(255, 254, 229, 1),
+        colorScheme:
+            ColorScheme.fromSwatch(primarySwatch: Colors.pink).copyWith(
+          secondary: Colors.amber,
+          background: const Color.fromRGBO(255, 254, 229, 1),
+        ),
         textTheme: ThemeData.light().textTheme.copyWith(
               labelLarge: const TextStyle(
                 color: Color.fromRGBO(20, 51, 51, 1),
@@ -40,7 +44,7 @@ class MyApp extends StatelessWidget {
       routes: {
         //  '/' : (ctx) => entspricht home-Screen
         CategoryMealsScreen.routeName: (ctx) => const CategoryMealsScreen(),
-        // MealDetailScreen.routeName: (ctx) => const MealDetailScreen(),
+        MealDetailScreen.routeName: (ctx) => const MealDetailScreen(),
       },
       onGenerateRoute: (settings) {
         print(settings.arguments);
