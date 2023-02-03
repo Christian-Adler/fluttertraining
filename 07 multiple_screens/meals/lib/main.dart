@@ -27,6 +27,7 @@ class _MyAppState extends State<MyApp> {
     'vegetarian': false,
   };
   List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favoriteMeals = [];
 
   void _setFilters(Map<String, bool> filters) {
     setState(() {
@@ -40,6 +41,21 @@ class _MyAppState extends State<MyApp> {
         return true;
       }).toList();
     });
+  }
+
+  void _toggleFavorite(String mealId) {
+    final existingIdx = _favoriteMeals.indexWhere((meal) => meal.id == mealId);
+    setState(() {
+      if (existingIdx >= 0) {
+        _favoriteMeals.removeAt(existingIdx);
+      } else {
+        _favoriteMeals.add(DUMMY_MEALS.firstWhere((meal) => meal.id == mealId));
+      }
+    });
+  }
+
+  bool _isMealFavorite(String mealId) {
+    return _favoriteMeals.any((meal) => meal.id == mealId);
   }
 
   // This widget is the root of your application.
@@ -70,12 +86,13 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
       ),
-      home: const TabsScreen(),
+      home: TabsScreen(_favoriteMeals),
       routes: {
         //  '/' : (ctx) => entspricht home-Screen
         CategoryMealsScreen.routeName: (ctx) =>
             CategoryMealsScreen(_availableMeals),
-        MealDetailScreen.routeName: (ctx) => const MealDetailScreen(),
+        MealDetailScreen.routeName: (ctx) =>
+            MealDetailScreen(_toggleFavorite, _isMealFavorite),
         FiltersScreen.routeName: (ctx) => FiltersScreen(
               _filters,
               _setFilters,

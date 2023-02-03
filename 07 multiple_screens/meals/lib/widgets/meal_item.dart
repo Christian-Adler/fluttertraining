@@ -4,11 +4,9 @@ import 'package:meals/screens/meal_detail_screen.dart';
 
 class MealItem extends StatelessWidget {
   final Meal meal;
-  final Function(String mealId) removeItem;
 
   const MealItem(
-    this.meal,
-    this.removeItem, {
+    this.meal, {
     Key? key,
   }) : super(key: key);
 
@@ -20,7 +18,7 @@ class MealItem extends StatelessWidget {
     ) // push liefert ein Future, was ausgefuehrt wird, sobla der Screen wieder entfernt wurde!
         .then((result) {
       if (result == null) return;
-      removeItem(result as String);
+      // removeItem(result as String);
     });
   }
 
