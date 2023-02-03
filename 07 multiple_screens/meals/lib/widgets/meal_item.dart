@@ -4,17 +4,24 @@ import 'package:meals/screens/meal_detail_screen.dart';
 
 class MealItem extends StatelessWidget {
   final Meal meal;
+  final Function(String mealId) removeItem;
 
   const MealItem(
-    this.meal, {
+    this.meal,
+    this.removeItem, {
     Key? key,
   }) : super(key: key);
 
   void _selectMeal(BuildContext context) {
-    Navigator.of(context).pushNamed(
+    Navigator.of(context)
+        .pushNamed(
       MealDetailScreen.routeName,
       arguments: meal.id,
-    );
+    ) // push liefert ein Future, was ausgefuehrt wird, sobla der Screen wieder entfernt wurde!
+        .then((result) {
+      if (result == null) return;
+      removeItem(result as String);
+    });
   }
 
   String get complexityText {
