@@ -2,23 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:meals/dummy_data.dart';
 import 'package:meals/widgets/meal_item.dart';
 
-class CategoryMealsScreen extends StatelessWidget {
+import '../models/meal.dart';
+
+class CategoryMealsScreen extends StatefulWidget {
   static const String routeName = '/category-meals';
 
   const CategoryMealsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<CategoryMealsScreen> createState() => _CategoryMealsScreenState();
+}
+
+class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
+  String categoryTitle = '';
+  List<Meal> displayedMeals = [];
+  Color categoryColor = Colors.white;
+  bool _initOnlyOnce = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_initOnlyOnce) {
+      return;
+    }
+    _initOnlyOnce = true;
+
+    // Geht wg. context nicht schon in initState - daher hier
     final routeArgs =
         ModalRoute.of(context)?.settings.arguments as Map<String, Object>;
-    final categoryTitle = routeArgs['title'] as String;
+    categoryTitle = routeArgs['title'] as String;
     final categoryId = routeArgs['id'] as String;
-    final categoryColor = routeArgs['color'] as Color;
+    categoryColor = routeArgs['color'] as Color;
 
-    final categoryMeals = DUMMY_MEALS.where((m) {
+    displayedMeals = DUMMY_MEALS.where((m) {
       return m.categories.contains(categoryId);
     }).toList();
 
+    super.didChangeDependencies();
+  }
+
+  void _removeMeal(String mealId) {
+    setState(() {
+      displayedMeals.removeWhere((meal) => meal.id == mealId);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(categoryTitle),
@@ -26,11 +60,11 @@ class CategoryMealsScreen extends StatelessWidget {
       ),
       body: ListView.builder(
         itemBuilder: (ctx, idx) {
-          return MealItem(categoryMeals[idx], (mealId) {
-            print(mealId);
+          return MealItem(displayedMeals[idx], (mealId) {
+            _removeMeal(mealId);
           });
         },
-        itemCount: categoryMeals.length,
+        itemCount: displayedMeals.length,
       ),
     );
   }
