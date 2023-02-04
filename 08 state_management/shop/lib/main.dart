@@ -11,8 +11,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: ProductsProvider(),
+    return ChangeNotifierProvider(
+      create: (ctx) => ProductsProvider(),
+      // create should be used if a new Object is provided, Less render cycles and .value could lead to buggy behavior
       child: MaterialApp(
         title: 'Shop',
         theme: ThemeData(
