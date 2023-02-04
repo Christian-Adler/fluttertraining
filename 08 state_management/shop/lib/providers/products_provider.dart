@@ -38,8 +38,23 @@ class ProductsProvider with ChangeNotifier {
     ),
   ];
 
+  // Would be a global filter (not only in a widget)
+  // var _showFavoritesOnly = false;
+  //
+  // void showOnlyFavorites(bool val) {
+  //   _showFavoritesOnly = val;
+  //   notifyListeners();
+  // }
+
   List<Product> get items {
+    // if (_showFavoritesOnly) {
+    //   return _items.where((p) => p.isFavorite).toList();
+    // }
     return [..._items];
+  }
+
+  List<Product> get favoriteItems {
+    return _items.where((p) => p.isFavorite).toList();
   }
 
   Product findById(String productId) {
