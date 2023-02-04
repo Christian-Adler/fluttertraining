@@ -9,7 +9,8 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Product product = Provider.of<Product>(context);
+    final Product product = Provider.of<Product>(context, listen: false);
+    // listen false to get the stable data only once
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -19,13 +20,16 @@ class ProductItem extends StatelessWidget {
             product.title,
             textAlign: TextAlign.center,
           ),
-          leading: IconButton(
-              icon: Icon(
-                  product.isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: Theme.of(context).colorScheme.secondary),
-              onPressed: () {
-                product.toggleFavoriteStatus();
-              }),
+          leading: Consumer<Product>(
+            // listen here again to product to get changes on favorite - always and just re render the button
+            builder: (ctx, product, _) => IconButton(
+                icon: Icon(
+                    product.isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: Theme.of(context).colorScheme.secondary),
+                onPressed: () {
+                  product.toggleFavoriteStatus();
+                }),
+          ),
           trailing: IconButton(
               icon: Icon(Icons.shopping_cart,
                   color: Theme.of(context).colorScheme.secondary),
