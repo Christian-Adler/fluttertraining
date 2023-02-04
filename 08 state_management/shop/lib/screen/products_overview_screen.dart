@@ -44,7 +44,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             onSelected: (FilterOptions selectedValue) {
               _setShowFavorites(selectedValue == FilterOptions.favorites);
             },
-          )
+          ),
         ],
       ),
       body: ProductsGrid(_showFavoritesOnly),
