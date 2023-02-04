@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/widget/badge-max.dart';
 
+import '../providers/cart.dart';
 import '../widget/products_grid.dart';
 
 enum FilterOptions {
@@ -44,6 +47,30 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             onSelected: (FilterOptions selectedValue) {
               _setShowFavorites(selectedValue == FilterOptions.favorites);
             },
+          ),
+          Consumer<Cart>(
+            builder: (_, cartData, ch) => BadgeMax(
+              value: cartData.itemCount.toString(),
+              child: ch,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {},
+            ),
+          ),
+          Consumer<Cart>(
+            builder: (_, cartData, ch) => Badge(
+              isLabelVisible: true,
+              label: Text(cartData.itemCount.toString()),
+              alignment: AlignmentDirectional.bottomEnd,
+              child: ch,
+            ),
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {},
+              ),
+            ),
           ),
         ],
       ),

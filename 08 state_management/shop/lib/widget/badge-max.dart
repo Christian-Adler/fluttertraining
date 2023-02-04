@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Badge extends StatelessWidget {
-  final Widget child;
+class BadgeMax extends StatelessWidget {
+  final Widget? child;
   final String value;
   final Color? color;
 
-  const Badge({
+  const BadgeMax({
     Key? key,
-    required this.child,
+    this.child,
     required this.value,
     this.color,
   }) : super(key: key);
@@ -17,7 +17,7 @@ class Badge extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        child,
+        child ?? const Text('no widget set'),
         Positioned(
           right: 8,
           top: 8,
