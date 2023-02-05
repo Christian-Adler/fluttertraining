@@ -41,7 +41,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       FocusScope.of(context).requestFocus(_priceFocusNode), // war gar nicht notwendig?
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'Price'),
+                  decoration: const InputDecoration(labelText: 'Price (€)'),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   focusNode: _priceFocusNode,
@@ -51,7 +51,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   decoration: const InputDecoration(labelText: 'Description'),
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
-                  textInputAction: TextInputAction.newline,
+                  // textInputAction: TextInputAction.newline, automatisch bei multiline
                   focusNode: _descriptionFocusNode,
                 ),
               ],
