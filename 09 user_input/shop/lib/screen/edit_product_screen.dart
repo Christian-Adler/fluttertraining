@@ -28,11 +28,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _updateImageUrl() {
-    if (!_imageUrlFocusNode.hasFocus) setState(() {});
+    if (!_imageUrlFocusNode.hasFocus) {
+      var value = _imageUrlController.text;
+      if (!value.startsWith('http')) return;
+      if (!value.endsWith('.png') && !value.endsWith('.jpg')) {
+        return;
+      }
+      setState(() {});
+    }
   }
 
   void _saveForm() {
-    _form.currentState?.save();
+    if (!_form.currentState!.validate()) return;
+
+    _form.currentState!.save();
   }
 
   @override
@@ -66,6 +75,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   decoration: const InputDecoration(labelText: 'Title'),
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (value) => FocusScope.of(context).requestFocus(_priceFocusNode),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Please provide a title';
+                    return null;
+                  },
                   // war gar nicht notwendig?
                   onSaved: (value) => _editedProduct = Product(
                       id: _editedProduct.id,
@@ -80,6 +93,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   keyboardType: TextInputType.number,
                   focusNode: _priceFocusNode,
                   onFieldSubmitted: (value) => FocusScope.of(context).requestFocus(_descriptionFocusNode),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Please enter a price';
+                    var val = double.tryParse(value);
+                    if (val == null || val <= 0) return 'Please provide a valid number > 0';
+                    return null;
+                  },
                   onSaved: (value) => _editedProduct = Product(
                       id: _editedProduct.id,
                       title: _editedProduct.title,
@@ -93,6 +112,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   keyboardType: TextInputType.multiline,
                   // textInputAction: TextInputAction.newline, automatisch bei multiline
                   focusNode: _descriptionFocusNode,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Please provide a description';
+                    if (value.length < 10) return 'Please provide a description with at least 10 letters';
+                    return null;
+                  },
                   onSaved: (value) => _editedProduct = Product(
                       id: _editedProduct.id,
                       title: _editedProduct.title,
@@ -135,6 +159,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           setState(() {});
                         },
                         focusNode: _imageUrlFocusNode,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) return 'Please provide a image url';
+                          if (!value.startsWith('http')) return 'Please provide a valid url';
+                          if (!value.endsWith('.png') && !value.endsWith('.jpg')) {
+                            return 'Please provide a valid url for png or jpg';
+                          }
+                          return null;
+                        },
                         onFieldSubmitted: (_) => _saveForm(),
                         onSaved: (value) => _editedProduct = Product(
                             id: _editedProduct.id,
