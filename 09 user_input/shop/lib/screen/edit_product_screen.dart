@@ -12,13 +12,30 @@ class EditProductScreen extends StatefulWidget {
 class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
+  final _imageUrlFocusNode = FocusNode();
+
+  final _imageUrlController = TextEditingController(); // we want the image url instantly to preview
+
+  @override
+  void initState() {
+    super.initState();
+    _imageUrlFocusNode.addListener(_updateImageUrl);
+  }
+
+  void _updateImageUrl() {
+    if (!_imageUrlFocusNode.hasFocus) setState(() {});
+  }
 
   @override
   void dispose() {
     super.dispose();
     // FocusNodes have to be disposed!
+    // Listeners have to be removed!
+    _imageUrlFocusNode.removeListener(_updateImageUrl);
     _priceFocusNode.dispose();
     _descriptionFocusNode.dispose();
+    _imageUrlFocusNode.dispose();
+    _imageUrlController.dispose();
   }
 
   @override
@@ -53,6 +70,45 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   keyboardType: TextInputType.multiline,
                   // textInputAction: TextInputAction.newline, automatisch bei multiline
                   focusNode: _descriptionFocusNode,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      margin: const EdgeInsets.only(top: 8, right: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: _imageUrlController.text.isEmpty
+                          ? const Text(
+                              'Enter a URL',
+                              textAlign: TextAlign.center,
+                            )
+                          : ClipRRect(
+                              borderRadius: const BorderRadius.all(Radius.circular(10)),
+                              child: Image.network(
+                                _imageUrlController.text,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(labelText: 'Image URL'),
+                        keyboardType: TextInputType.url,
+                        textInputAction: TextInputAction.done,
+                        controller: _imageUrlController,
+                        onEditingComplete: () {
+                          setState(() {});
+                        },
+                        focusNode: _imageUrlFocusNode,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
