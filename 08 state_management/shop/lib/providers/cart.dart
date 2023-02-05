@@ -2,12 +2,14 @@ import 'package:flutter/widgets.dart';
 
 class CartItem {
   final String id;
+  final String productId;
   final String title;
   final int quantity;
   final double price;
 
   CartItem({
     required this.id,
+    required this.productId,
     required this.title,
     required this.quantity,
     required this.price,
@@ -39,14 +41,20 @@ class Cart with ChangeNotifier {
           productId,
           (existingCartItem) => CartItem(
               id: existingCartItem.id,
+              productId: existingCartItem.productId,
               title: existingCartItem.title,
               quantity: existingCartItem.quantity + 1,
               price: existingCartItem.price));
     } else {
-      _items.putIfAbsent(
-          productId, () => CartItem(id: DateTime.now().toString(), title: title, quantity: 1, price: price));
+      _items.putIfAbsent(productId,
+          () => CartItem(id: DateTime.now().toString(), productId: productId, title: title, quantity: 1, price: price));
     }
 
+    notifyListeners();
+  }
+
+  void removeItem(String productId) {
+    _items.remove(productId);
     notifyListeners();
   }
 }
