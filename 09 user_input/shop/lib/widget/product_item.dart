@@ -37,6 +37,7 @@ class ProductItem extends StatelessWidget {
               cart.addItem(product.id, product.price, product.title);
               // Scaffold.of(context).openDrawer(); // open drawer ;)
               // Scaffold.of(context).showBodyScrim(true, 0.5); // Layer
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text(
