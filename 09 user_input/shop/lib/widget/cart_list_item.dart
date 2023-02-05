@@ -13,7 +13,15 @@ class CartListItem extends StatelessWidget {
     return Dismissible(
       key: ValueKey(cartItem.id),
       background: Container(
-        color: Theme.of(context).colorScheme.error,
+        // color: Theme.of(context).colorScheme.error,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.yellow.withOpacity(0.5),
+              Theme.of(context).colorScheme.error,
+            ],
+          ),
+        ),
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 15),
@@ -24,6 +32,29 @@ class CartListItem extends StatelessWidget {
         ),
       ),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) {
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text('Do you really want to remove the item from the cart?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop(false);
+                },
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop(true);
+                },
+                child: const Text('Yes'),
+              ),
+            ],
+          ),
+        );
+      },
       onDismissed: (direction) {
         Provider.of<Cart>(context, listen: false).removeItem(cartItem.productId);
       },
