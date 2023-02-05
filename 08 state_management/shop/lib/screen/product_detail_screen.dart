@@ -13,13 +13,49 @@ class ProductDetailScreen extends StatelessWidget {
 
     final product = Provider.of<ProductsProvider>(
       context,
-      listen:
-          false, // kein Listen hier. Kein aktualisieren, nur weil ein neues Produkt in die Liste kam.
+      listen: false, // kein Listen hier. Kein aktualisieren, nur weil ein neues Produkt in die Liste kam.
     ).findById(productId);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(product.title),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 300,
+              width: double.infinity,
+              child: Image.network(
+                product.imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              '${product.price} €',
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                width: double.infinity,
+                child: Text(
+                  product.description,
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                )),
+          ],
+        ),
       ),
     );
   }
