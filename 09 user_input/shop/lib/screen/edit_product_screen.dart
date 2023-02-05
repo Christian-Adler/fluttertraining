@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop/providers/product.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const String routeName = '/edit-product';
@@ -16,6 +17,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   final _imageUrlController = TextEditingController(); // we want the image url instantly to preview
 
+  final _form = GlobalKey<FormState>();
+
+  var _editedProduct = Product(id: DateTime.now().toString(), title: '', description: '', price: 0, imageUrl: '');
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +29,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) setState(() {});
+  }
+
+  void _saveForm() {
+    _form.currentState?.save();
   }
 
   @override
@@ -43,10 +52,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Product'),
+        actions: [IconButton(onPressed: _saveForm, icon: const Icon(Icons.save))],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key: _form,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -54,8 +65,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   autofocus: true,
                   decoration: const InputDecoration(labelText: 'Title'),
                   textInputAction: TextInputAction.next,
-                  onFieldSubmitted: (value) =>
-                      FocusScope.of(context).requestFocus(_priceFocusNode), // war gar nicht notwendig?
+                  onFieldSubmitted: (value) => FocusScope.of(context).requestFocus(_priceFocusNode),
+                  // war gar nicht notwendig?
+                  onSaved: (value) => _editedProduct = Product(
+                      id: _editedProduct.id,
+                      title: value!,
+                      description: _editedProduct.description,
+                      price: _editedProduct.price,
+                      imageUrl: _editedProduct.imageUrl),
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Price (€)'),
@@ -63,6 +80,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   keyboardType: TextInputType.number,
                   focusNode: _priceFocusNode,
                   onFieldSubmitted: (value) => FocusScope.of(context).requestFocus(_descriptionFocusNode),
+                  onSaved: (value) => _editedProduct = Product(
+                      id: _editedProduct.id,
+                      title: _editedProduct.title,
+                      description: _editedProduct.description,
+                      price: double.parse(value!),
+                      imageUrl: _editedProduct.imageUrl),
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Description'),
@@ -70,6 +93,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   keyboardType: TextInputType.multiline,
                   // textInputAction: TextInputAction.newline, automatisch bei multiline
                   focusNode: _descriptionFocusNode,
+                  onSaved: (value) => _editedProduct = Product(
+                      id: _editedProduct.id,
+                      title: _editedProduct.title,
+                      description: value!,
+                      price: _editedProduct.price,
+                      imageUrl: _editedProduct.imageUrl),
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -106,6 +135,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           setState(() {});
                         },
                         focusNode: _imageUrlFocusNode,
+                        onFieldSubmitted: (_) => _saveForm(),
+                        onSaved: (value) => _editedProduct = Product(
+                            id: _editedProduct.id,
+                            title: _editedProduct.title,
+                            description: _editedProduct.description,
+                            price: _editedProduct.price,
+                            imageUrl: value!),
                       ),
                     ),
                   ],
