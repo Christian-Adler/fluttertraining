@@ -70,8 +70,13 @@ class ProductsProvider with ChangeNotifier {
   }
 
   void updateProduct(Product product) {
-    final idx = _items.indexWhere((element) => element.id == product.id);
+    final idx = _items.indexWhere((p) => p.id == product.id);
     if (idx >= 0) _items[idx] = product;
+    notifyListeners();
+  }
+
+  void deleteProduct(String productId) {
+    _items.removeWhere((p) => p.id == productId);
     notifyListeners();
   }
 }
