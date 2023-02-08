@@ -27,9 +27,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   var _isInit = true;
   final _initValues = {
-    'titel': '',
-    'description': '',
-    'price': '',
+    'title': 'dummy',
+    'description': 'dummy description',
+    'price': '12.34',
     'imageUrl': 'https://www.google.com/logos/doodles/2023/celebrating-mama-cax-6753651837110013-s.png', // als default
   };
 
