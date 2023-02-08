@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http; // with alias to scope all of http.dart
 import 'product.dart';
 
 class ProductsProvider with ChangeNotifier {
-  List<Product> _items = [
+  final List<Product> _items = [
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -86,6 +86,9 @@ class ProductsProvider with ChangeNotifier {
           imageUrl: product.imageUrl);
       _items.add(newProduct);
       notifyListeners();
+    }).catchError((err) {
+      // print(err);
+      throw err;
     });
   }
 
