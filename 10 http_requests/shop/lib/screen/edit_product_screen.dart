@@ -70,11 +70,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _form.currentState!.save();
     var productsProvider = Provider.of<ProductsProvider>(context, listen: false);
     if (_editedProduct.id.isEmpty) {
-      productsProvider.addProduct(_editedProduct);
+      productsProvider.addProduct(_editedProduct).then((_) {
+        Navigator.of(context).pop();
+      });
     } else {
       productsProvider.updateProduct(_editedProduct);
+      Navigator.of(context).pop();
     }
-    Navigator.of(context).pop();
   }
 
   @override
