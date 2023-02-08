@@ -28,7 +28,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     'titel': '',
     'description': '',
     'price': '',
-    'imageUrl': '',
+    'imageUrl': 'https://www.google.com/logos/doodles/2023/celebrating-mama-cax-6753651837110013-s.png', // als default
   };
 
   @override
@@ -50,9 +50,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _initValues['description'] = _editedProduct.description;
       _initValues['price'] = _editedProduct.price.toString();
       _initValues['imageUrl'] = _editedProduct.imageUrl;
-
-      _imageUrlController.text = _initValues['imageUrl']!;
     }
+    _imageUrlController.text = _initValues['imageUrl']!;
   }
 
   void _updateImageUrl() {
