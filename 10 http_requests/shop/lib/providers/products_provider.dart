@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http; // with alias to scope all of http.dart
 import 'product.dart';
 
 class ProductsProvider with ChangeNotifier {
+  static const backendURL = 'flutter-http-563e6-default-rtdb.europe-west1.firebasedatabase.app';
   List<Product> _items = [
     // Product(
     //   id: 'p1',
@@ -62,7 +63,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url = Uri.https('flutter-http-563e6-default-rtdb.europe-west1.firebasedatabase.app', '/products.json');
+    final url = Uri.https(backendURL, '/products.json');
     try {
       final response = await http.get(url);
       final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
@@ -86,7 +87,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    final url = Uri.https('flutter-http-563e6-default-rtdb.europe-west1.firebasedatabase.app', '/products.json');
+    final url = Uri.https(backendURL, '/products.json');
 
     try {
       final response = await http.post(
@@ -117,10 +118,24 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  void updateProduct(Product product) {
+  Future<void> updateProduct(Product product) async {
     final idx = _items.indexWhere((p) => p.id == product.id);
-    if (idx >= 0) _items[idx] = product;
-    notifyListeners();
+    if (idx >= 0) {
+      final url = Uri.https(backendURL, '/products/${product.id}.json');
+
+      await http.patch(
+        url,
+        body: json.encode({
+          "title": product.title,
+          "description": product.description,
+          "price": product.price,
+          "imageUrl": product.imageUrl
+        }),
+      );
+
+      _items[idx] = product;
+      notifyListeners();
+    }
   }
 
   void deleteProduct(String productId) {
