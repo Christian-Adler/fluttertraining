@@ -149,7 +149,7 @@ class ProductsProvider with ChangeNotifier {
     final url = Uri.https(Globals.backendURL, '/products/$productId.json');
     final response = await http.delete(url);
 
-    // Bei post wird autom. Exception geworfen - bei delete nicht
+    // Bei post/get wird autom. Exception geworfen - bei delete nicht
     if (response.statusCode >= 400) {
       _items.insert(existingProductIdx, existingProduct);
       notifyListeners();

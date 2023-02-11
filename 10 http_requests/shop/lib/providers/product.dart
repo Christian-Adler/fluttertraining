@@ -23,19 +23,29 @@ class Product with ChangeNotifier {
       this.isFavorite = false});
 
   Future<void> toggleFavoriteStatus() async {
+    final oldValue = isFavorite;
     final url = Uri.https(Globals.backendURL, '/products/$id.json');
-
-    var response = await http.patch(
-      url,
-      body: json.encode({
-        "isFavorite": !isFavorite,
-      }),
-    );
-
-    if (response.statusCode >= 400) throw HttpException('Update favorite failed!');
-
     isFavorite = !isFavorite;
-
     notifyListeners();
+
+    try {
+      // http wirft nur bei get/post eigene exception.
+      // Daher bei patch selbst statusCode auswerten.
+      // Aber trotzdem try catch wg. z.B. Netzwerkfehler.
+      var response = await http.patch(
+        url,
+        body: json.encode({
+          "isFavorite": !isFavorite,
+        }),
+      );
+
+      if (response.statusCode >= 400) {
+        throw HttpException('Update favorite failed!');
+      }
+    } catch (err) {
+      isFavorite = oldValue;
+      notifyListeners();
+      rethrow;
+    }
   }
 }
