@@ -22,6 +22,7 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   bool _showFavoritesOnly = false;
+  bool _isLoading = true;
 
   // bool _isInit = true;
 
@@ -29,8 +30,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   void initState() {
     // Provider.of<ProductsProvider>(context).fetchAndSetProducts(); // solange nicht listen:false geht das nicht in initState
     // Workaround 1 (durch delayed wird der Inhalt erst ausgefuehrt, nachdem initState fertig ist.
-    Future.delayed(Duration.zero).then((_) {
-      Provider.of<ProductsProvider>(context, listen: false).fetchAndSetProducts();
+    Future.delayed(Duration.zero).then((_) async {
+      await Provider.of<ProductsProvider>(context, listen: false).fetchAndSetProducts();
+      setState(() {
+        _isLoading = false;
+      });
     });
     super.initState();
   }
@@ -104,7 +108,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ],
       ),
       drawer: const AppDrawer(),
-      body: ProductsGrid(_showFavoritesOnly),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductsGrid(_showFavoritesOnly),
     );
   }
 }
