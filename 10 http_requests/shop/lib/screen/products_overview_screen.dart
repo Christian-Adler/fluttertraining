@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/providers/products_provider.dart';
 import 'package:shop/screen/cart_screen.dart';
 import 'package:shop/widget/app_drawer.dart';
 import 'package:shop/widget/badge-max.dart';
@@ -21,6 +22,28 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   bool _showFavoritesOnly = false;
+
+  // bool _isInit = true;
+
+  @override
+  void initState() {
+    // Provider.of<ProductsProvider>(context).fetchAndSetProducts(); // solange nicht listen:false geht das nicht in initState
+    // Workaround 1 (durch delayed wird der Inhalt erst ausgefuehrt, nachdem initState fertig ist.
+    Future.delayed(Duration.zero).then((_) {
+      Provider.of<ProductsProvider>(context, listen: false).fetchAndSetProducts();
+    });
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // Workaround 2
+    // if (_isInit) {
+    //   _isInit = false;
+    //   Provider.of<ProductsProvider>(context).fetchAndSetProducts();
+    // }
+    super.didChangeDependencies();
+  }
 
   void _setShowFavorites(bool val) {
     setState(() {
