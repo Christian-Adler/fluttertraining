@@ -27,8 +27,12 @@ class ProductItem extends StatelessWidget {
             builder: (ctx, product, _) => IconButton(
                 icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border,
                     color: Theme.of(context).colorScheme.secondary),
-                onPressed: () {
-                  product.toggleFavoriteStatus();
+                onPressed: () async {
+                  try {
+                    await product.toggleFavoriteStatus();
+                  } catch (err) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err.toString())));
+                  }
                 }),
           ),
           trailing: IconButton(

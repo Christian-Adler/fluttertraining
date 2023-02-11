@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http; // with alias to scope all of http.dart
+import 'package:shop/models/globals.dart';
 import 'package:shop/models/http_exception.dart';
 
 import 'product.dart';
 
 class ProductsProvider with ChangeNotifier {
-  static const backendURL = 'flutter-http-563e6-default-rtdb.europe-west1.firebasedatabase.app';
   List<Product> _items = [
     // Product(
     //   id: 'p1',
@@ -64,7 +64,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url = Uri.https(backendURL, '/products.json');
+    final url = Uri.https(Globals.backendURL, '/products.json');
     try {
       final response = await http.get(url);
       final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
@@ -88,7 +88,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    final url = Uri.https(backendURL, '/products.json');
+    final url = Uri.https(Globals.backendURL, '/products.json');
 
     try {
       final response = await http.post(
@@ -122,7 +122,7 @@ class ProductsProvider with ChangeNotifier {
   Future<void> updateProduct(Product product) async {
     final idx = _items.indexWhere((p) => p.id == product.id);
     if (idx >= 0) {
-      final url = Uri.https(backendURL, '/products/${product.id}.json');
+      final url = Uri.https(Globals.backendURL, '/products/${product.id}.json');
 
       await http.patch(
         url,
@@ -146,10 +146,10 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
 
     // optimistic updating with rollback on fail
-    final url = Uri.https(backendURL, '/products/$productId.json');
+    final url = Uri.https(Globals.backendURL, '/products/$productId.json');
     final response = await http.delete(url);
 
-    // Bei post|patch wird autom. Exception geworfen - bei delete nicht
+    // Bei post wird autom. Exception geworfen - bei delete nicht
     if (response.statusCode >= 400) {
       _items.insert(existingProductIdx, existingProduct);
       notifyListeners();

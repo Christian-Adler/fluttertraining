@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
         title: 'Shop',
         theme: ThemeData(
           fontFamily: 'Lato',
+          // useMaterial3: true,
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple).copyWith(
             secondary: Colors.deepOrange,
             //   onPrimary: Colors.white, Farbe die auf primary verwendet wird.
