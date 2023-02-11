@@ -67,7 +67,9 @@ class ProductsProvider with ChangeNotifier {
     final url = Uri.https(Globals.backendURL, '/products.json');
     try {
       final response = await http.get(url);
-      final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
+      var decodedBody = jsonDecode(response.body);
+      if (decodedBody == null) return;
+      final extractedData = decodedBody as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
