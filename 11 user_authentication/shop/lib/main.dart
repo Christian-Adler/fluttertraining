@@ -9,6 +9,7 @@ import 'package:shop/screen/cart_screen.dart';
 import 'package:shop/screen/edit_product_screen.dart';
 import 'package:shop/screen/orders_screen.dart';
 import 'package:shop/screen/product_detail_screen.dart';
+import 'package:shop/screen/products_overview_screen.dart';
 import 'package:shop/screen/user_products_screen.dart';
 
 void main() => runApp(const MyApp());
@@ -34,25 +35,27 @@ class MyApp extends StatelessWidget {
           create: (ctx) => Auth(),
         ),
       ],
-      child: MaterialApp(
-        title: 'Shop',
-        theme: ThemeData(
-          fontFamily: 'Lato',
-          // useMaterial3: true,
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple).copyWith(
-            secondary: Colors.deepOrange,
-            //   onPrimary: Colors.white, Farbe die auf primary verwendet wird.
+      child: Consumer<Auth>(
+        builder: (context, auth, _) => MaterialApp(
+          title: 'Shop',
+          theme: ThemeData(
+            fontFamily: 'Lato',
+            // useMaterial3: true,
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple).copyWith(
+              secondary: Colors.deepOrange,
+              //   onPrimary: Colors.white, Farbe die auf primary verwendet wird.
+            ),
+            textTheme: Theme.of(context).textTheme,
           ),
-          textTheme: Theme.of(context).textTheme,
+          home: auth.isAuth ? const ProductsOverviewScreen() : const AuthScreen(),
+          routes: {
+            ProductDetailScreen.routeName: (context) => const ProductDetailScreen(),
+            CartScreen.routeName: (context) => const CartScreen(),
+            OrdersScreen.routeName: (context) => const OrdersScreen(),
+            UserProductsScreen.routeName: (context) => const UserProductsScreen(),
+            EditProductScreen.routeName: (context) => const EditProductScreen(),
+          },
         ),
-        home: const AuthScreen(),
-        routes: {
-          ProductDetailScreen.routeName: (context) => const ProductDetailScreen(),
-          CartScreen.routeName: (context) => const CartScreen(),
-          OrdersScreen.routeName: (context) => const OrdersScreen(),
-          UserProductsScreen.routeName: (context) => const UserProductsScreen(),
-          EditProductScreen.routeName: (context) => const EditProductScreen(),
-        },
       ),
     );
   }
