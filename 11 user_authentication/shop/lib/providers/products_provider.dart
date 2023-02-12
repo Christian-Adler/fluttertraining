@@ -37,9 +37,16 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((p) => p.id == productId);
   }
 
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
     if (userId == null) return;
-    var url = Uri.https(Globals.backendURL, '/products.json', {'auth': authToken});
+    Map<String, dynamic> queryParameters = {
+      'auth': authToken,
+    };
+    if (filterByUser) {
+      queryParameters.addAll({'orderBy': '"creatorId"', 'equalTo': '"$userId"'});
+    }
+    var url =
+        Uri.https(Globals.backendURL, '/products.json', queryParameters); // double quotes are required by firebase
     try {
       final response = await http.get(url);
       var decodedBody = jsonDecode(response.body);
@@ -81,6 +88,7 @@ class ProductsProvider with ChangeNotifier {
           "description": product.description,
           "price": product.price,
           "imageUrl": product.imageUrl,
+          'creatorId': userId,
         }),
       );
 
