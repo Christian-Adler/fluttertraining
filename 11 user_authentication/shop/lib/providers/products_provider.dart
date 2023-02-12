@@ -8,10 +8,11 @@ import 'package:shop/models/http_exception.dart';
 import 'product.dart';
 
 class ProductsProvider with ChangeNotifier {
-  final String authToken;
+  final String? authToken;
+  final String? userId;
   final List<Product> _items;
 
-  ProductsProvider(this.authToken, this._items);
+  ProductsProvider(this.authToken, this.userId, this._items);
 
   // Would be a global filter (not only in a widget)
   // var _showFavoritesOnly = false;
@@ -37,11 +38,17 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url = Uri.https(Globals.backendURL, '/products.json', {'auth': authToken});
+    if (userId == null) return;
+    var url = Uri.https(Globals.backendURL, '/products.json', {'auth': authToken});
     try {
       final response = await http.get(url);
       var decodedBody = jsonDecode(response.body);
       if (decodedBody == null) return;
+
+      url = Uri.https(Globals.backendURL, '/userFavorites/$userId.json', {'auth': authToken});
+      final responseFavorites = await http.get(url);
+      final favoriteData = jsonDecode(responseFavorites.body);
+
       final extractedData = decodedBody as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
       extractedData.forEach((prodId, prodData) {
@@ -51,7 +58,7 @@ class ProductsProvider with ChangeNotifier {
           description: prodData['description'],
           price: prodData['price'],
           imageUrl: prodData['imageUrl'],
-          isFavorite: prodData['isFavorite'],
+          isFavorite: favoriteData == null ? false : favoriteData[prodId] ?? false,
         ));
       });
 
@@ -74,7 +81,6 @@ class ProductsProvider with ChangeNotifier {
           "description": product.description,
           "price": product.price,
           "imageUrl": product.imageUrl,
-          "isFavorite": product.isFavorite,
         }),
       );
 

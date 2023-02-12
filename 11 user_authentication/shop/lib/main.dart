@@ -26,8 +26,8 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<Auth, ProductsProvider>(
           update: (ctx, auth, previousProducts) =>
-              ProductsProvider(auth.token!, previousProducts == null ? [] : previousProducts.items),
-          create: (ctx) => ProductsProvider('', []),
+              ProductsProvider(auth.token, auth.userId, previousProducts == null ? [] : previousProducts.items),
+          create: (ctx) => ProductsProvider(null, null, []),
           // create should be used if a new Object is provided, Less render cycles and .value could lead to buggy behavior
         ),
         ChangeNotifierProvider(

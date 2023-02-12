@@ -22,9 +22,10 @@ class Product with ChangeNotifier {
       required this.imageUrl,
       this.isFavorite = false});
 
-  Future<void> toggleFavoriteStatus(String? token) async {
+  Future<void> toggleFavoriteStatus(String? token, String? userId) async {
+    if (token == null || userId == null) return;
     final oldValue = isFavorite;
-    final url = Uri.https(Globals.backendURL, '/products/$id.json', {'auth': token});
+    final url = Uri.https(Globals.backendURL, '/userFavorites/$userId/$id.json', {'auth': token});
     isFavorite = !isFavorite;
     notifyListeners();
 
@@ -32,11 +33,11 @@ class Product with ChangeNotifier {
       // http wirft nur bei get/post eigene exception.
       // Daher bei patch selbst statusCode auswerten.
       // Aber trotzdem try catch wg. z.B. Netzwerkfehler.
-      var response = await http.patch(
+      var response = await http.put(
         url,
-        body: json.encode({
-          "isFavorite": !isFavorite,
-        }),
+        body: json.encode(
+          isFavorite,
+        ),
       );
 
       if (response.statusCode >= 400) {
