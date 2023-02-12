@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop/providers/products_provider.dart';
+import 'package:shop/providers/products.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   static const String routeName = '/product-detail';
@@ -11,7 +11,7 @@ class ProductDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final productId = ModalRoute.of(context)?.settings.arguments as String;
 
-    final product = Provider.of<ProductsProvider>(
+    final product = Provider.of<Products>(
       context,
       listen: false, // kein Listen hier. Kein aktualisieren, nur weil ein neues Produkt in die Liste kam.
     ).findById(productId);

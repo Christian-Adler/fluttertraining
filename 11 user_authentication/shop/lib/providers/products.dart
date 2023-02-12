@@ -7,12 +7,12 @@ import 'package:shop/models/http_exception.dart';
 
 import 'product.dart';
 
-class ProductsProvider with ChangeNotifier {
+class Products with ChangeNotifier {
   final String? authToken;
   final String? userId;
   final List<Product> _items;
 
-  ProductsProvider(this.authToken, this.userId, this._items);
+  Products(this.authToken, this.userId, this._items);
 
   // Would be a global filter (not only in a widget)
   // var _showFavoritesOnly = false;

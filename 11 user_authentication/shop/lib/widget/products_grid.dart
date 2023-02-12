@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop/providers/products_provider.dart';
+import 'package:shop/providers/product.dart';
+import 'package:shop/providers/products.dart';
 
 import './product_item.dart';
 
@@ -11,10 +12,8 @@ class ProductsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productsProviderData = Provider.of<ProductsProvider>(context);
-    final products = showFavoritesOnly
-        ? productsProviderData.favoriteItems
-        : productsProviderData.items;
+    final productsProviderData = Provider.of<Products>(context);
+    final products = showFavoritesOnly ? productsProviderData.favoriteItems : productsProviderData.items;
 
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -25,7 +24,7 @@ class ProductsGrid extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(10),
       itemCount: products.length,
-      itemBuilder: (context, index) => ChangeNotifierProvider.value(
+      itemBuilder: (context, index) => ChangeNotifierProvider<Product>.value(
         // see training: 199 @ 3:00
         value: products[index],
         // .value should be used when reusing existing Objects

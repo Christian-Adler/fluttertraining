@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop/providers/products_provider.dart';
+import 'package:shop/providers/products.dart';
 import 'package:shop/screen/edit_product_screen.dart';
 import 'package:shop/widget/app_drawer.dart';
 import 'package:shop/widget/user_product_item.dart';
@@ -11,7 +11,7 @@ class UserProductsScreen extends StatelessWidget {
   const UserProductsScreen({Key? key}) : super(key: key);
 
   Future<void> _refreshProducts(BuildContext context) async {
-    await Provider.of<ProductsProvider>(context, listen: false).fetchAndSetProducts(true);
+    await Provider.of<Products>(context, listen: false).fetchAndSetProducts(true);
   }
 
   @override
@@ -35,7 +35,7 @@ class UserProductsScreen extends StatelessWidget {
               )
             : RefreshIndicator(
                 onRefresh: () => _refreshProducts(context),
-                child: Consumer<ProductsProvider>(
+                child: Consumer<Products>(
                   builder: (ctx, productsData, _) => Padding(
                     padding: const EdgeInsets.all(8),
                     child: ListView.separated(

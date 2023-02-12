@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shop/screen/edit_product_screen.dart';
 
 import '../providers/product.dart';
-import '../providers/products_provider.dart';
+import '../providers/products.dart';
 
 class UserProductItem extends StatelessWidget {
   final Product product;
@@ -34,7 +34,7 @@ class UserProductItem extends StatelessWidget {
             IconButton(
               onPressed: () async {
                 try {
-                  await Provider.of<ProductsProvider>(context, listen: false).deleteProduct(product.id);
+                  await Provider.of<Products>(context, listen: false).deleteProduct(product.id);
                 } catch (err) {
                   scaffoldMessenger.showSnackBar(
                     const SnackBar(

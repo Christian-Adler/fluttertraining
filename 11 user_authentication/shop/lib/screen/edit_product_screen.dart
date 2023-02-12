@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/providers/product.dart';
-import 'package:shop/providers/products_provider.dart';
+import 'package:shop/providers/products.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const String routeName = '/edit-product';
@@ -47,7 +47,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
     var productId = ModalRoute.of(context)?.settings.arguments;
     if (productId != null) {
-      _editedProduct = Provider.of<ProductsProvider>(context, listen: false).findById(productId as String);
+      _editedProduct = Provider.of<Products>(context, listen: false).findById(productId as String);
       _initValues['title'] = _editedProduct.title;
       _initValues['description'] = _editedProduct.description;
       _initValues['price'] = _editedProduct.price.toString();
@@ -75,7 +75,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _isLoading = true;
     });
 
-    var productsProvider = Provider.of<ProductsProvider>(context, listen: false);
+    var productsProvider = Provider.of<Products>(context, listen: false);
     if (_editedProduct.id.isEmpty) {
       try {
         await productsProvider.addProduct(_editedProduct);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop/providers/products_provider.dart';
+import 'package:shop/providers/products.dart';
 import 'package:shop/screen/cart_screen.dart';
 import 'package:shop/widget/app_drawer.dart';
 import 'package:shop/widget/badge-max.dart';
@@ -28,10 +28,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
 
   @override
   void initState() {
-    // Provider.of<ProductsProvider>(context).fetchAndSetProducts(); // solange nicht listen:false geht das nicht in initState
+    // Provider.of<Products>(context).fetchAndSetProducts(); // solange nicht listen:false geht das nicht in initState
     // Workaround 1 (durch delayed wird der Inhalt erst ausgefuehrt, nachdem initState fertig ist.
-    Future.delayed(Duration.zero).then((_) async {
-      await Provider.of<ProductsProvider>(context, listen: false).fetchAndSetProducts();
+    // Duration 500ms statt 0 - sonst kommt beim hot reload ein fehler, das Products bereits disposed ist.
+    Future.delayed(const Duration(milliseconds: 500)).then((_) async {
+      await Provider.of<Products>(context, listen: false).fetchAndSetProducts();
       setState(() {
         _isLoading = false;
       });
@@ -44,7 +45,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     // Workaround 2
     // if (_isInit) {
     //   _isInit = false;
-    //   Provider.of<ProductsProvider>(context).fetchAndSetProducts();
+    //   Provider.of<Products>(context, listen: false).fetchAndSetProducts().then((_) {
+    //     setState(() {
+    //       _isLoading = false;
+    //     });
+    //   });
     // }
     super.didChangeDependencies();
   }
