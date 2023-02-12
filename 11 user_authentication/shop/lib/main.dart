@@ -22,7 +22,12 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => ProductsProvider(),
+          create: (ctx) => Auth(),
+        ),
+        ChangeNotifierProxyProvider<Auth, ProductsProvider>(
+          update: (ctx, auth, previousProducts) =>
+              ProductsProvider(auth.token!, previousProducts == null ? [] : previousProducts.items),
+          create: (ctx) => ProductsProvider('', []),
           // create should be used if a new Object is provided, Less render cycles and .value could lead to buggy behavior
         ),
         ChangeNotifierProvider(
@@ -30,9 +35,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => Orders(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => Auth(),
         ),
       ],
       child: Consumer<Auth>(
