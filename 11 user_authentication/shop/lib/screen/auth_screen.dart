@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/providers/auth.dart';
 
+import '../models/http_exception.dart';
+
 enum AuthMode { signup, login }
 
 class AuthScreen extends StatelessWidget {
@@ -102,6 +104,23 @@ class _AuthCardState extends State<_AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('An Error Occurred'),
+        content: Text(message),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text('Okay'))
+        ],
+      ),
+    );
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       // Invalid!
@@ -111,10 +130,25 @@ class _AuthCardState extends State<_AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.login) {
-      await Provider.of<Auth>(context, listen: false).signIn(_authData['email']!, _authData['password']!);
-    } else {
-      await Provider.of<Auth>(context, listen: false).signUp(_authData['email']!, _authData['password']!);
+    try {
+      if (_authMode == AuthMode.login) {
+        await Provider.of<Auth>(context, listen: false).signIn(_authData['email']!, _authData['password']!);
+      } else {
+        await Provider.of<Auth>(context, listen: false).signUp(_authData['email']!, _authData['password']!);
+      }
+    } on HttpException catch (err) {
+      var errorMessage = 'Authentication failed!';
+      if (err.toString().contains('EMAIL_EXISTS')) {
+        errorMessage = 'This email address is already in use.';
+      } else if (err.toString().contains('INVALID_EMAIL')) {
+        errorMessage = 'This is not a valid email address.';
+      } else if (err.toString().contains('WEAK_PASSWORD')) {
+        errorMessage = 'This password is to weak.';
+      }
+      _showErrorDialog(errorMessage);
+    } catch (err) {
+      var errorMessage = 'Could not authenticate you. Please try again later.';
+      _showErrorDialog(errorMessage);
     }
     setState(() {
       _isLoading = false;

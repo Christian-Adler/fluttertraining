@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shop/models/http_exception.dart';
 
 import '../models/globals.dart';
 
@@ -20,14 +21,20 @@ class Auth with ChangeNotifier {
 
   Future<void> _authenticate(String urlPath, String email, String password) async {
     final url = Uri.https(Globals.apiURL, urlPath, {'key': Globals.apiKey});
-    final response = await http.post(url,
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-          'returnSecureToken': true,
-        }));
+    try {
+      final response = await http.post(url,
+          body: jsonEncode({
+            'email': email,
+            'password': password,
+            'returnSecureToken': true,
+          }));
 
-    var decodedResponse = jsonDecode(response.body);
-    print(decodedResponse);
+      var decodedResponse = jsonDecode(response.body);
+      if (decodedResponse['error'] != null) {
+        throw HttpException(decodedResponse['error']['message']);
+      }
+    } catch (err) {
+      rethrow;
+    }
   }
 }
