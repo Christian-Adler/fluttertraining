@@ -32,6 +32,13 @@ class Auth with ChangeNotifier {
     return _authenticate('/v1/accounts:signInWithPassword', email, password);
   }
 
+  void logout() {
+    _token = null;
+    _userId = null;
+    _expiryDate = null;
+    notifyListeners();
+  }
+
   Future<void> _authenticate(String urlPath, String email, String password) async {
     final url = Uri.https(Globals.apiURL, urlPath, {'key': Globals.apiKey});
     try {
