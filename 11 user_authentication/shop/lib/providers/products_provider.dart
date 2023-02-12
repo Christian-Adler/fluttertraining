@@ -64,7 +64,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    final url = Uri.https(Globals.backendURL, '/products.json');
+    final url = Uri.https(Globals.backendURL, '/products.json', {'auth': authToken});
 
     try {
       final response = await http.post(
@@ -98,7 +98,7 @@ class ProductsProvider with ChangeNotifier {
   Future<void> updateProduct(Product product) async {
     final idx = _items.indexWhere((p) => p.id == product.id);
     if (idx >= 0) {
-      final url = Uri.https(Globals.backendURL, '/products/${product.id}.json');
+      final url = Uri.https(Globals.backendURL, '/products/${product.id}.json', {'auth': authToken});
 
       await http.patch(
         url,
@@ -122,7 +122,7 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
 
     // optimistic updating with rollback on fail
-    final url = Uri.https(Globals.backendURL, '/products/$productId.json');
+    final url = Uri.https(Globals.backendURL, '/products/$productId.json', {'auth': authToken});
     final response = await http.delete(url);
 
     // Bei post/get wird autom. Exception geworfen - bei delete nicht

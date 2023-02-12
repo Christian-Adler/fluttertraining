@@ -16,14 +16,17 @@ class OrderItem {
 }
 
 class Orders with ChangeNotifier {
-  final List<OrderItem> _orders = [];
+  final String? authToken;
+  final List<OrderItem> _orders;
+
+  Orders(this.authToken, this._orders);
 
   List<OrderItem> get orders {
     return [..._orders];
   }
 
   Future<void> fetchAndSetOrders() async {
-    final url = Uri.https(Globals.backendURL, '/orders.json');
+    final url = Uri.https(Globals.backendURL, '/orders.json', {'auth': authToken});
     final List<OrderItem> loadedOrders = [];
     final response = await http.get(url);
     var decodedBody = jsonDecode(response.body);
@@ -51,7 +54,7 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    final url = Uri.https(Globals.backendURL, '/orders.json');
+    final url = Uri.https(Globals.backendURL, '/orders.json', {'auth': authToken});
     final timestamp = DateTime.now();
     final response = await http.post(
       url,
