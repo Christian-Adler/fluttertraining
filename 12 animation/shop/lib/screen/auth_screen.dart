@@ -115,7 +115,7 @@ class _AuthCardState extends State<_AuthCard> with SingleTickerProviderStateMixi
       begin: const Size(double.infinity, 260),
       end: const Size(double.infinity, 320),
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
-    _heightAnimation.addListener(() => setState(() {})); // SetState, damit build neu ausgefuehrt wird.
+    // _heightAnimation.addListener(() => setState(() {})); // SetState, damit build neu ausgefuehrt wird.
   }
 
   @override
@@ -197,12 +197,16 @@ class _AuthCardState extends State<_AuthCard> with SingleTickerProviderStateMixi
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
-      child: Container(
-        // height: _authMode == AuthMode.signup ? 320 : 260,
-        height: _heightAnimation.value.height,
-        constraints: BoxConstraints(minHeight: _heightAnimation.value.height),
-        width: deviceSize.width * 0.75,
-        padding: const EdgeInsets.all(16.0),
+      child: AnimatedBuilder(
+        animation: _heightAnimation,
+        builder: (ctx, unchangedChild) => Container(
+          // height: _authMode == AuthMode.signup ? 320 : 260,
+          height: _heightAnimation.value.height,
+          constraints: BoxConstraints(minHeight: _heightAnimation.value.height),
+          width: deviceSize.width * 0.75,
+          padding: const EdgeInsets.all(16.0),
+          child: unchangedChild, // child will not be re-rendered every time the Container is rendered during animation
+        ),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
