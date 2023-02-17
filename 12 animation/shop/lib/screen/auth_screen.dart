@@ -104,24 +104,24 @@ class _AuthCardState extends State<_AuthCard> with SingleTickerProviderStateMixi
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  late AnimationController _controller;
-  late Animation<Size> _heightAnimation;
+  // late AnimationController _controller;
+  // late Animation<Size> _heightAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
-    _heightAnimation = Tween<Size>(
-      begin: const Size(double.infinity, 260),
-      end: const Size(double.infinity, 320),
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
+    // _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    // _heightAnimation = Tween<Size>(
+    //   begin: const Size(double.infinity, 260),
+    //   end: const Size(double.infinity, 320),
+    // ).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
     // _heightAnimation.addListener(() => setState(() {})); // SetState, damit build neu ausgefuehrt wird.
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    // _controller.dispose();
   }
 
   void _showErrorDialog(String message) {
@@ -180,12 +180,12 @@ class _AuthCardState extends State<_AuthCard> with SingleTickerProviderStateMixi
       setState(() {
         _authMode = AuthMode.signup;
       });
-      _controller.forward();
+      // _controller.forward();
     } else {
       setState(() {
         _authMode = AuthMode.login;
       });
-      _controller.reverse();
+      // _controller.reverse();
     }
   }
 
@@ -197,16 +197,14 @@ class _AuthCardState extends State<_AuthCard> with SingleTickerProviderStateMixi
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
-      child: AnimatedBuilder(
-        animation: _heightAnimation,
-        builder: (ctx, unchangedChild) => Container(
-          // height: _authMode == AuthMode.signup ? 320 : 260,
-          height: _heightAnimation.value.height,
-          constraints: BoxConstraints(minHeight: _heightAnimation.value.height),
-          width: deviceSize.width * 0.75,
-          padding: const EdgeInsets.all(16.0),
-          child: unchangedChild, // child will not be re-rendered every time the Container is rendered during animation
-        ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease,
+        height: _authMode == AuthMode.signup ? 320 : 260,
+        // height: _heightAnimation.value.height,
+        constraints: BoxConstraints(minHeight: _authMode == AuthMode.signup ? 320 : 260),
+        width: deviceSize.width * 0.75,
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
