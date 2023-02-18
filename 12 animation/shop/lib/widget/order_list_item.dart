@@ -25,23 +25,26 @@ class _OrderListItemState extends State<OrderListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(10),
-      child: Column(children: [
-        ListTile(
-          title: Text('${widget.orderItem.amount} €'),
-          subtitle: Text(
-            DateFormat('dd/MM/yyyy hh:mm').format(widget.orderItem.dateTime),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      height: _expanded ? min(widget.orderItem.products.length * 20 + 110, 200) : 95,
+      child: Card(
+        margin: const EdgeInsets.all(10),
+        child: Column(children: [
+          ListTile(
+            title: Text('${widget.orderItem.amount} €'),
+            subtitle: Text(
+              DateFormat('dd/MM/yyyy hh:mm').format(widget.orderItem.dateTime),
+            ),
+            trailing: IconButton(
+              icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
+              onPressed: () => _toggleExpand(),
+            ),
           ),
-          trailing: IconButton(
-            icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
-            onPressed: () => _toggleExpand(),
-          ),
-        ),
-        if (_expanded)
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-            height: min(widget.orderItem.products.length * 20 + 10, 100),
+            height: _expanded ? min(widget.orderItem.products.length * 20 + 10, 100) : 0,
             child: ListView.builder(
               itemBuilder: (context, index) {
                 var cartItem = widget.orderItem.products[index];
@@ -62,7 +65,8 @@ class _OrderListItemState extends State<OrderListItem> {
               itemCount: widget.orderItem.products.length,
             ),
           ),
-      ]),
+        ]),
+      ),
     );
   }
 }
