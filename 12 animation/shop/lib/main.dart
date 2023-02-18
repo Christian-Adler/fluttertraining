@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/helpers/custom_route.dart';
 import 'package:shop/providers/auth.dart';
 import 'package:shop/providers/cart.dart';
 import 'package:shop/providers/orders.dart';
@@ -51,6 +52,10 @@ class MyApp extends StatelessWidget {
               //   onPrimary: Colors.white, Farbe die auf primary verwendet wird.
             ),
             textTheme: Theme.of(context).textTheme,
+            pageTransitionsTheme: PageTransitionsTheme(builders: {
+              TargetPlatform.android: CustomPageTransitionBuilder(),
+              TargetPlatform.iOS: CustomPageTransitionBuilder(),
+            }),
           ),
           home: auth.isAuth
               ? const ProductsOverviewScreen()

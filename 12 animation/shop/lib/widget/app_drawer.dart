@@ -30,6 +30,10 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Orders'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+              // Custom animation on per route level:
+              // Navigator.of(context).pushReplacement(CustomRoute(
+              //   builder: (context) => const OrdersScreen(),
+              // ));
             },
           ),
           const Divider(),
