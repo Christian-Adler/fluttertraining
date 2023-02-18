@@ -17,16 +17,23 @@ class ProductDetailScreen extends StatelessWidget {
     ).findById(productId);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(product.title),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 300,
-              width: double.infinity,
-              child: Hero(
+      // appBar: AppBar(
+      //   title: Text(product.title),
+      // ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 300,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: false,
+              title: Container(
+                width: double.infinity,
+                // color: Theme.of(context).colorScheme.primary.withAlpha(200),
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                child: Text(product.title),
+              ),
+              background: Hero(
                 tag: productId,
                 child: Image.network(
                   product.imageUrl,
@@ -34,20 +41,25 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              '${product.price} €',
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 20,
+          ),
+          SliverList(
+              delegate: SliverChildListDelegate(
+            [
+              const SizedBox(
+                height: 10,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
+              Text(
+                '${product.price} €',
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 20,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
                 ),
@@ -56,9 +68,14 @@ class ProductDetailScreen extends StatelessWidget {
                   product.description,
                   textAlign: TextAlign.center,
                   softWrap: true,
-                )),
-          ],
-        ),
+                ),
+              ),
+              const SizedBox(
+                height: 800, // to get view scrollable
+              ),
+            ],
+          ))
+        ],
       ),
     );
   }
