@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart' as syspaths;
 
 class ImageInput extends StatefulWidget {
   const ImageInput({Key? key}) : super(key: key);
@@ -23,6 +25,10 @@ class _ImageInputState extends State<ImageInput> {
     setState(() {
       _storedFile = File(imgFile.path);
     });
+
+    final appDir = await syspaths.getApplicationDocumentsDirectory();
+    final fileName = path.basename(imgFile.path);
+    final savedImg = await _storedFile?.copy('${appDir.path}/$fileName');
   }
 
   @override
@@ -36,14 +42,14 @@ class _ImageInputState extends State<ImageInput> {
           alignment: Alignment.center,
           child: _storedFile == null
               ? const Text(
-                  'No Image Taken',
-                  textAlign: TextAlign.center,
-                )
+            'No Image Taken',
+            textAlign: TextAlign.center,
+          )
               : Image.file(
-                  _storedFile!,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                ),
+            _storedFile!,
+            fit: BoxFit.cover,
+            width: double.infinity,
+          ),
         ),
         const SizedBox(
           width: 10,
