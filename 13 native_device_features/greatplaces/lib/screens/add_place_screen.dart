@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:greatplaces/provider/great_places.dart';
 import 'package:greatplaces/widgets/image_input.dart';
+import 'package:provider/provider.dart';
 
 class AddPlaceScreen extends StatefulWidget {
   static const routeName = "/add-place";
@@ -12,6 +16,18 @@ class AddPlaceScreen extends StatefulWidget {
 
 class _AddPlaceScreenState extends State<AddPlaceScreen> {
   final _titleController = TextEditingController();
+  File? _pickedImg;
+
+  void _selectImage(File pickedImg) {
+    // kein setState, weil kein Rebuild notwendig. Bild wird in image_input schon gezeigt
+    _pickedImg = pickedImg;
+  }
+
+  void _savePlace() {
+    if (_titleController.text.isEmpty || _pickedImg == null) return;
+    Provider.of<GreatPlaces>(context, listen: false).addPlace(_titleController.text, _pickedImg!);
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,19 +47,17 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                   children: [
                     TextField(
                       controller: _titleController,
-                      decoration: InputDecoration(labelText: 'Title'),
+                      decoration: const InputDecoration(labelText: 'Title'),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    const ImageInput(),
+                    const SizedBox(height: 10),
+                    ImageInput(_selectImage),
                   ],
                 ),
               ),
             ),
           ),
           ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: _savePlace,
             icon: const Icon(Icons.add),
             label: const Text("Add Place"),
             style: ElevatedButton.styleFrom(
