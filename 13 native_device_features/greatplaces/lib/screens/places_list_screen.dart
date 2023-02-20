@@ -18,21 +18,32 @@ class PlacesListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<GreatPlaces>(
-        child: const Center(child: Text('No places yet, start adding some!')),
-        builder: (context, greatPlaces, ch) => greatPlaces.items.isEmpty
-            ? ch!
-            : ListView.builder(
-                itemBuilder: (ctx, i) => ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: FileImage(greatPlaces.items[i].image),
-                      ),
-                      title: Text(greatPlaces.items[i].title),
-                      onTap: () {
-                        // go to detail
-                      },
-                    ),
-                itemCount: greatPlaces.items.length),
+      body: FutureBuilder(
+        future: Provider.of<GreatPlaces>(context, listen: false).fetchAndSetPlaces(),
+        builder: (ctx, greatPlacesSnapshot) => greatPlacesSnapshot.connectionState == ConnectionState.waiting
+            ? const Center(child: CircularProgressIndicator())
+            : Consumer<GreatPlaces>(
+                child: const Center(child: Text('No places yet, start adding some!')),
+                builder: (context, greatPlaces, ch) => greatPlaces.items.isEmpty
+                    ? ch!
+                    : ListView.builder(
+                        itemBuilder: (ctx, i) {
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: FileImage(greatPlaces.items[i].image),
+                            ),
+                            title: Text(greatPlaces.items[i].title),
+                            onTap: () {
+                              // go to detail
+                            },
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete_outline_rounded, color: Theme.of(ctx).colorScheme.error),
+                              onPressed: () => greatPlaces.delete(greatPlaces.items[i].id),
+                            ),
+                          );
+                        },
+                        itemCount: greatPlaces.items.length),
+              ),
       ),
     );
   }
