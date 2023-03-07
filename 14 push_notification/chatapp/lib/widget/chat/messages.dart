@@ -16,8 +16,9 @@ class Messages extends StatelessWidget {
 
         var docs = chatSnapshot.data?.docs;
         if (docs == null) return const Text('No chat data!');
-        
+
         return ListView.builder(
+          reverse: true,
           itemBuilder: (ctx, index) => Text(docs[index]['text']),
           itemCount: docs.length,
         );
