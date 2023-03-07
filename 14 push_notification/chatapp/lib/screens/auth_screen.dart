@@ -1,4 +1,5 @@
 import 'package:chatapp/widget/auth/auth_form.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,24 +21,16 @@ class _AuthScreenState extends State<AuthScreen> {
         authResult = await _auth.signInWithEmailAndPassword(email: email, password: password);
       } else {
         authResult = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(authResult.user?.uid)
+            .set({'username': username, 'email': email});
       }
-    } on PlatformException catch (err) {
-      var message = 'An error occurred, please check your credentials!';
-
-      if (err.message != null) {
-        message = err.message!;
-      }
-
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          duration: const Duration(seconds: 2),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
-      );
     } catch (err) {
       var message = err.toString();
+      if (err is PlatformException) {
+        message = err.message ?? '';
+      }
 
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
