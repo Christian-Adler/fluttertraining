@@ -14,7 +14,7 @@ class _NewMessageState extends State<NewMessage> {
 
   void _sendMessage() {
     FocusScope.of(context).unfocus();
-    FirebaseFirestore.instance.collection('chat').add({'text': _enteredMessage});
+    FirebaseFirestore.instance.collection('chat').add({'text': _enteredMessage, 'createdAt': Timestamp.now()});
     _controller.clear();
     setState(() {
       _enteredMessage = '';

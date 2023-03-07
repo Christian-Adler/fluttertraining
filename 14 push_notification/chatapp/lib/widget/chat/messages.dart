@@ -23,7 +23,7 @@ class Messages extends StatelessWidget {
           itemCount: docs.length,
         );
       },
-      stream: FirebaseFirestore.instance.collection('chat').snapshots(),
+      stream: FirebaseFirestore.instance.collection('chat').orderBy('createdAt', descending: true).snapshots(),
     );
   }
 }
