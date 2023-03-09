@@ -17,6 +17,7 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         Row(
           mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -33,7 +34,7 @@ class MessageBubble extends StatelessWidget {
               ),
               width: 140,
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
               child: Column(
                 crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                 children: [
@@ -55,9 +56,14 @@ class MessageBubble extends StatelessWidget {
             ),
           ],
         ),
-        Positioned(top: -10, left: isMe ? null : 120, right: isMe ? 120 : null, child: CircleAvatar()),
-      ],
-      clipBehavior: Clip.none, // allow overflow
+        Positioned(
+            top: -0,
+            left: isMe ? null : 130,
+            right: isMe ? 130 : null,
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(imageUrl),
+            )),
+      ], // allow overflow
     );
   }
 }
