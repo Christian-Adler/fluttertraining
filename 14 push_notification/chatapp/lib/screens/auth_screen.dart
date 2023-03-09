@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:chatapp/widget/auth/auth_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,7 +18,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
 
-  void _submitAuthForm(String email, String username, String password, bool isLoginMode) async {
+  void _submitAuthForm(String email, String username, String password, File? userImage, bool isLoginMode) async {
     UserCredential authResult;
     try {
       setState(() {
@@ -24,11 +27,21 @@ class _AuthScreenState extends State<AuthScreen> {
       if (isLoginMode) {
         authResult = await _auth.signInWithEmailAndPassword(email: email, password: password);
       } else {
+        if (userImage == null) throw Exception('No user image set');
         authResult = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(authResult.user?.uid)
-            .set({'username': username, 'email': email});
+
+        // image upload
+        var ref = FirebaseStorage.instance.ref('user_image').child('${authResult.user?.uid ?? 'invalid'}.jpg');
+        var uploadTask = ref.putFile(userImage);
+        uploadTask.whenComplete(() async {
+          var url = await ref.getDownloadURL();
+
+
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(authResult.user?.uid)
+              .set({'username': username, 'email': email, 'imageUrl': url});
+        });
       }
     } catch (err) {
       var message = err.toString();
@@ -41,7 +54,10 @@ class _AuthScreenState extends State<AuthScreen> {
         SnackBar(
           content: Text(message),
           duration: const Duration(seconds: 2),
-          backgroundColor: Theme.of(context).colorScheme.error,
+          backgroundColor: Theme
+              .of(context)
+              .colorScheme
+              .error,
         ),
       );
     } finally {
@@ -54,7 +70,10 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Theme
+          .of(context)
+          .colorScheme
+          .primary,
       body: AuthForm(_submitAuthForm, _isLoading),
     );
   }
