@@ -18,9 +18,14 @@ class _NewMessageState extends State<NewMessage> {
     var userId = FirebaseAuth.instance.currentUser?.uid;
     var userData = await FirebaseFirestore.instance.collection('users').doc(userId).get();
     var userName = userData.data()?['username'] ?? 'Unknown user';
-    FirebaseFirestore.instance
-        .collection('chat')
-        .add({'text': _enteredMessage, 'createdAt': Timestamp.now(), 'userId': userId, 'userName': userName});
+    var imageURL = userData.data()?['imageUrl'] ?? '.';
+    FirebaseFirestore.instance.collection('chat').add({
+      'text': _enteredMessage,
+      'createdAt': Timestamp.now(),
+      'userId': userId,
+      'userName': userName,
+      'imageUrl': imageURL,
+    });
     _controller.clear();
     setState(() {
       _enteredMessage = '';
