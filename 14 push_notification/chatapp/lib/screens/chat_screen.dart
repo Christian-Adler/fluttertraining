@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
+import '../widget/chat/fcm_message_display.dart';
+
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
 
@@ -73,6 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: const [
+          FcmMessageDisplay(),
           Expanded(child: Messages()),
           NewMessage(),
         ],
