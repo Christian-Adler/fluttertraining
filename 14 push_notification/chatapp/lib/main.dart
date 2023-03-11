@@ -1,6 +1,7 @@
 import 'package:chatapp/providers/fcm_messages.dart';
 import 'package:chatapp/screens/auth_screen.dart';
 import 'package:chatapp/screens/chat_screen.dart';
+import 'package:chatapp/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -110,11 +111,13 @@ class _ApplicationState extends State<Application> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
-      ChangeNotifierProvider(create: (context) => FcmMessages(),),
-    ],
-      child:
-      MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => FcmMessages(),
+        ),
+      ],
+      child: MaterialApp(
         title: 'Flutter Chat',
         theme: ThemeData(
             buttonTheme: ButtonTheme.of(context).copyWith(
@@ -126,13 +129,16 @@ class _ApplicationState extends State<Application> {
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, userSnapshot) {
-            if (userSnapshot.hasData) {
+            if (userSnapshot.connectionState == ConnectionState.waiting) {
+              return const SplashScreen();
+            } else if (userSnapshot.hasData) {
               return const ChatScreen();
             } else {
               return const AuthScreen();
             }
           },
         ),
-      ),);
+      ),
+    );
   }
 }
